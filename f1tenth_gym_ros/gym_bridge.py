@@ -34,7 +34,7 @@ from geometry_msgs.msg import Quaternion
 from ackermann_msgs.msg import AckermannDriveStamped
 from tf2_ros import TransformBroadcaster
 
-import gym
+import gymnasium as gym
 import numpy as np
 from transforms3d import euler
 
@@ -109,7 +109,7 @@ class GymBridge(Node):
             self.opp_requested_speed = 0.0
             self.opp_steer = 0.0
             self.opp_collision = False
-            self.obs, _ , self.done, _ = self.env.reset(np.array([[sx, sy, stheta], [sx1, sy1, stheta1]]))
+            self.obs, _ , self.done, _ = self.env.reset(options={'poses': np.array([[sx, sy, stheta], [sx1, sy1, stheta1]])})
             self.ego_scan = list(self.obs['scans'][0])
             self.opp_scan = list(self.obs['scans'][1])
 
@@ -121,7 +121,7 @@ class GymBridge(Node):
             opp_ego_odom_topic = self.opp_namespace + '/' + self.get_parameter('opp_ego_odom_topic').value
         else:
             self.has_opp = False
-            self.obs, _ , self.done, _ = self.env.reset(np.array([[sx, sy, stheta]]))
+            self.obs, _ , self.done, _ = self.env.reset(options={'poses': np.array([[sx, sy, stheta]])})
             self.ego_scan = list(self.obs['scans'][0])
 
         # sim physical step timer
@@ -194,9 +194,9 @@ class GymBridge(Node):
         _, _, rtheta = euler.quat2euler([rqw, rqx, rqy, rqz], axes='sxyz')
         if self.has_opp:
             opp_pose = [self.obs['poses_x'][1], self.obs['poses_y'][1], self.obs['poses_theta'][1]]
-            self.obs, _ , self.done, _ = self.env.reset(np.array([[rx, ry, rtheta], opp_pose]))
+            self.obs, _ , self.done, _ = self.env.reset(options={'poses': np.array([[rx, ry, rtheta], opp_pose])})
         else:
-            self.obs, _ , self.done, _ = self.env.reset(np.array([[rx, ry, rtheta]]))
+            self.obs, _ , self.done, _ = self.env.reset(options={'poses': np.array([[rx, ry, rtheta]])})
 
     def opp_reset_callback(self, pose_msg):
         if self.has_opp:
@@ -207,7 +207,7 @@ class GymBridge(Node):
             rqz = pose_msg.pose.orientation.z
             rqw = pose_msg.pose.orientation.w
             _, _, rtheta = euler.quat2euler([rqw, rqx, rqy, rqz], axes='sxyz')
-            self.obs, _ , self.done, _ = self.env.reset(np.array([list(self.ego_pose), [rx, ry, rtheta]]))
+            self.obs, _ , self.done, _ = self.env.reset(options={'poses': np.array([list(self.ego_pose), [rx, ry, rtheta]])})
     def teleop_callback(self, twist_msg):
         if not self.ego_drive_published:
             self.ego_drive_published = True
