@@ -40,7 +40,7 @@ This installation guide will be split into instruction for installing the ROS 2 
 - Clone the repo into the workspace:
   ```bash
   cd $HOME/sim_ws/src
-  git clone https://github.com/f1tenth/f1tenth_gym_ros.git
+  git clone https://github.com/ricardoholmes/f1tenth_gym_ros.git
   ```
 - Update correct parameter for path to map file:
   Go to `sim.yaml` [f1tenth_gym_ros/config/sim.yaml](https://github.com/ricardoholmes/f1tenth_gym_ros/blob/main/config/sim.yaml) in your cloned repo, change the `map_path` parameter to point to the correct location. It should be `'<your_home_dir>/sim_ws/src/f1tenth_gym_ros/maps/levine'`
@@ -50,7 +50,7 @@ This installation guide will be split into instruction for installing the ROS 2 
   cd ..
   rosdep install -i --from-path src -y
   ```
-- Build the workspace: ```colcon build```
+- Build the workspace: ```colcon build --symlink-install```
 
 ## With an NVIDIA gpu:
 
@@ -99,9 +99,9 @@ docker exec -it f1tenth_gym_ros-sim-1 /bin/bash
 1. `tmux` is included in the contianer, so you can create multiple bash sessions in the same terminal.
 2. To launch the simulation, make sure you source both the ROS2 setup script and the local workspace setup script. Run the following in the bash session from the container:
 ```bash
-$ source /opt/ros/foxy/setup.bash
-$ source install/local_setup.bash
-$ ros2 launch f1tenth_gym_ros gym_bridge_launch.py
+source /opt/ros/jazzy/setup.bash
+source install/local_setup.bash
+ros2 launch f1tenth_gym_ros gym_bridge_launch.py
 ```
 A rviz window should pop up showing the simulation either on your host system or in the browser window depending on the display forwarding you chose.
 
@@ -162,6 +162,7 @@ In addition to all topics in the single agent scenario, these topics are also av
 
 The keyboard teleop node from `teleop_twist_keyboard` is also installed as part of the simulation's dependency. To enable keyboard teleop, set `kb_teleop` to `True` in `sim.yaml`. After launching the simulation, in another terminal, run:
 ```bash
+source /opt/ros/jazzy/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 Then, press `i` to move forward, `u` and `o` to move forward and turn, `,` to move backwards, `m` and `.` to move backwards and turn, and `k` to stop in the terminal window running the teleop node.
