@@ -15,10 +15,24 @@ This installation guide will be split into instruction for installing the ROS 2 
 
 **Install the following dependencies:**
 - **ROS 2** Follow the instructions [here](https://docs.ros.org/en/jazzy/Installation.html) to install ROS 2 Jazzy.
+  - Make sure you install the optional ```ros-dev-tools``` package as well.
+- **Update your system**
+  ```bash
+  sudo apt update
+  sudo apt upgrade
+  ```
+- **F1TENTH Gym (Dependencies)**
+  ```bash
+  sudo apt install \
+    python3-pip \
+    python3-numpy \
+    python3-opengl \
+    python3-pyglet
+  ```
 - **F1TENTH Gym**
   ```bash
   git clone https://github.com/ricardoholmes/f1tenth_gym.git
-  cd f1tenth_gym && pip3 install -e .
+  cd f1tenth_gym && pip3 install -e . --break-system-packages
   ```
 
 **Installing the simulation:**
@@ -29,7 +43,7 @@ This installation guide will be split into instruction for installing the ROS 2 
   git clone https://github.com/f1tenth/f1tenth_gym_ros.git
   ```
 - Update correct parameter for path to map file:
-  Go to `sim.yaml` [f1tenth_gym_ros/blob/main/config/sim.yaml](https://github.com/ricardoholmes/f1tenth_gym_ros/blob/main/config/sim.yaml) in your cloned repo, change the `map_path` parameter to point to the correct location. It should be `'<your_home_dir>/sim_ws/src/f1tenth_gym_ros/maps/levine'`
+  Go to `sim.yaml` [f1tenth_gym_ros/config/sim.yaml](https://github.com/ricardoholmes/f1tenth_gym_ros/blob/main/config/sim.yaml) in your cloned repo, change the `map_path` parameter to point to the correct location. It should be `'<your_home_dir>/sim_ws/src/f1tenth_gym_ros/maps/levine'`
 - Install dependencies with rosdep:
   ```bash
   source /opt/ros/jazzy/setup.bash
